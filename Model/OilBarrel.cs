@@ -2,16 +2,16 @@
 {
     public class OilBarrel : Container
     {
-        private const int CAPACITY = 159;
+        private const double CAPACITY = 159;
 
-        private OilBarrel(int capacity, int content) : base(capacity, content) { }
+        private OilBarrel(double capacity, double content) : base(capacity, content) { }
 
         public static OilBarrel Get()
         {
             return Get(0);
         }
 
-        public static OilBarrel Get(int content)
+        public static OilBarrel Get(double content)
         {
             return new OilBarrel(CAPACITY, content);
         }

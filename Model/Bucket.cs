@@ -4,27 +4,27 @@ namespace Model
 {
     public class Bucket : Container
     {
-        private const int CAPACITY_DEFAULT = 12;
-        private const int CAPACITY_MIN = 10;
+        private const double CAPACITY_DEFAULT = 12;
+        private const double CAPACITY_MIN = 10;
 
-        private Bucket(int capacity, int content) : base(capacity, content) { }
+        private Bucket(double capacity, double content) : base(capacity, content) { }
 
         public static Bucket GetDefault()
         {
             return GetDefault(0);
         }
 
-        public static Bucket GetDefault(int content)
+        public static Bucket GetDefault(double content)
         {
             return new Bucket(CAPACITY_DEFAULT, content);
         }
 
-        public static Bucket Get(int capacity)
+        public static Bucket Get(double capacity)
         {
             return Get(capacity, 0);
         }
 
-        public static Bucket Get(int capacity, int content)
+        public static Bucket Get(double capacity, double content)
         {
             if (capacity < CAPACITY_MIN)
             {
