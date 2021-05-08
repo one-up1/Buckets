@@ -30,13 +30,13 @@ namespace Buckets.Model
 
         public void Fill(double amount)
         {
-            if (amount < 0)
+            if (amount <= 0)
             {
                 throw new ArgumentOutOfRangeException("amount",
-                    "amount cannot be less than 0");
+                    "amount must be greater than 0");
             }
-
             content += amount;
+
             if (content == capacity)
             {
                 Full(0);
@@ -48,12 +48,27 @@ namespace Buckets.Model
             }
         }
 
+        public void Fill(Bucket bucket)
+        {
+            Fill(bucket, content);
+        }
+
+        public void Fill(Bucket bucket, double amount)
+        {
+            Empty(amount);
+            bucket.Fill(amount);
+        }
+
         public void Empty(double amount)
         {
-            if (amount < 0)
+            if (content == 0)
+            {
+                throw new InvalidOperationException("Bucket is empty");
+            }
+            if (amount <= 0)
             {
                 throw new ArgumentOutOfRangeException("amount",
-                    "amount cannot be less than 0");
+                    "amount must be greater than 0");
             }
             if (amount > content)
             {
