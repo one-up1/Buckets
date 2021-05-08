@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model
+namespace Buckets.Model
 {
     public delegate void Full(double overflow);
 

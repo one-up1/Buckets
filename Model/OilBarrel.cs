@@ -1,6 +1,6 @@
-﻿namespace Model
+﻿namespace Buckets.Model
 {
-    public class OilBarrel : Container
+    public sealed class OilBarrel : Container
     {
         private const double CAPACITY = 159;
 

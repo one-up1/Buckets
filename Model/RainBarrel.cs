@@ -1,6 +1,6 @@
-﻿namespace Model
+﻿namespace Buckets.Model
 {
-    public class RainBarrel : Container
+    public sealed class RainBarrel : Container
     {
         private const double CAPACITY_DEFAULT = 100;
         private const double CAPACITY_SMALL = 80;

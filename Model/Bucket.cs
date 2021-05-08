@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Model
+namespace Buckets.Model
 {
-    public class Bucket : Container
+    public sealed class Bucket : Container
     {
         private const double CAPACITY_DEFAULT = 12;
         private const double CAPACITY_MIN = 10;
