@@ -3,16 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Buckets.WPF"
         mc:Ignorable="d"
         Width="800"
         Height="450"
-        Title="MainWindow">
+        Title="MainWindow"
+        WindowStartupLocation="CenterScreen">
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -39,27 +39,27 @@
             <Label
                 Grid.Row="0"
                 Grid.Column="0"
+                VerticalAlignment="Center"
                 Content="Capacity: " />
 
             <TextBox
                 Name="tbBucketCapacity"
                 Grid.Row="0"
                 Grid.Column="1"
-                VerticalAlignment="Top"
-                Margin="5"
+                VerticalAlignment="Center"
                 Text="12" />
 
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
+                VerticalAlignment="Center"
                 Content="Content: " />
 
             <TextBox
                 Name="tbBucketContent"
                 Grid.Row="1"
                 Grid.Column="1"
-                VerticalAlignment="Top"
-                Margin="5" />
+                VerticalAlignment="Center" />
 
             <Button
                 Name="bCreateBucket"
@@ -87,20 +87,23 @@
             <StackPanel
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
-                Orientation="Horizontal"
-                Margin="5">
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
 
                 <RadioButton
                     Name="rbRainBarrelDefault"
+                    Margin="5"
                     Content="Default"
                     IsChecked="true" />
 
                 <RadioButton
                     Name="rbRainBarrelSmall"
+                    Margin="5"
                     Content="Small" />
 
                 <RadioButton
                     Name="rbRainBarrelLarge"
+                    Margin="5"
                     Content="Large" />
                 
             </StackPanel>
@@ -108,14 +111,14 @@
             <Label
                 Grid.Row="1"
                 Grid.Column="0"
+                VerticalAlignment="Center"
                 Content="Content: " />
 
             <TextBox
                 Name="tbRainBarrelContent"
                 Grid.Row="1"
                 Grid.Column="1"
-                VerticalAlignment="Top"
-                Margin="5" />
+                VerticalAlignment="Center" />
 
             <Button
                 Name="bCreateRainBarrel"
@@ -130,7 +133,8 @@
         <Grid Grid.Column="2">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="84" />
+                <RowDefinition Height="42" />
+                <RowDefinition Height="42" />
                 <RowDefinition Height="48" />
             </Grid.RowDefinitions>
 
@@ -140,20 +144,20 @@
             </Grid.ColumnDefinitions>
 
             <Label
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="0"
+                VerticalAlignment="Center"
                 Content="Content: " />
 
             <TextBox
                 Name="tbOilBarrelContent"
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="1"
-                VerticalAlignment="top"
-                Margin="5" />
+                VerticalAlignment="Center" />
 
             <Button
                 Name="bCreateOilBarrel"
-                Grid.Row="1"
+                Grid.Row="2"
                 Grid.ColumnSpan="2"
                 Margin="5"
                 Content="Create oil barrel"
@@ -161,7 +165,13 @@
 
         </Grid>
 
-        <StackPanel
+        <ListView
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="5"
+            ItemsSource="{Binding Containers,Mode=OneWay}" />
+
+        <!--<StackPanel
             Grid.Row="1"
             Grid.Column="0"
             Margin="5">
@@ -176,7 +186,7 @@
                 Margin="5"
                 FontWeight="Bold" />
 
-        </StackPanel>
+        </StackPanel>-->
 
     </Grid>
 </Window>

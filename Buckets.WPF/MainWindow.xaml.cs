@@ -5,11 +5,14 @@ namespace Buckets.WPF
 {
     public partial class MainWindow : Window
     {
-        private Container container;
+        private MainViewModel viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            viewModel = new MainViewModel();
+            DataContext = viewModel;
         }
 
         private void bCreateBucket_Click(object sender, RoutedEventArgs e)
@@ -17,13 +20,12 @@ namespace Buckets.WPF
             double content = tbBucketContent.Text.Length == 0 ? 0 : double.Parse(tbBucketContent.Text);
             if (tbBucketCapacity.Text.Length == 0)
             {
-                container = Bucket.GetDefault(content);
+                viewModel.Containers.Add(Bucket.GetDefault(content));
             }
             else
             {
-                container = Bucket.Get(double.Parse(tbBucketCapacity.Text), content);
+                viewModel.Containers.Add(Bucket.Get(double.Parse(tbBucketCapacity.Text), content));
             }
-            SetDescription("bucket");
         }
 
         private void bCreateRainBarrel_Click(object sender, RoutedEventArgs e)
@@ -31,35 +33,40 @@ namespace Buckets.WPF
             double content = tbRainBarrelContent.Text.Length == 0 ? 0 : double.Parse(tbRainBarrelContent.Text);
             if (rbRainBarrelDefault.IsChecked == true)
             {
-                container = RainBarrel.Get(content);
+                viewModel.Containers.Add(RainBarrel.Get(content));
             }
             else if (rbRainBarrelSmall.IsChecked == true)
             {
-                container = RainBarrel.GetSmall(content);
+                viewModel.Containers.Add(RainBarrel.GetSmall(content));
             }
             else if (rbRainBarrelLarge.IsChecked == true)
             {
-                container = RainBarrel.GetLarge(content);
+                viewModel.Containers.Add(RainBarrel.GetLarge(content));
             }
-            SetDescription("rain barrel");
         }
 
         private void bCreateOilBarrel_Click(object sender, RoutedEventArgs e)
         {
             double content = tbOilBarrelContent.Text.Length == 0 ? 0 : double.Parse(tbOilBarrelContent.Text);
-            container = OilBarrel.Get(content);
-            SetDescription("oil barrel");
+            viewModel.Containers.Add(OilBarrel.Get(content));
         }
 
-        private void SetDescription(string typeName)
+        private void Container_Full(object sender, ContainerFullEventArgs e)
+        {
+
+        }
+
+        private void AddContainer(Container container)
+        {
+            container.Full += Container_Full;
+            viewModel.Containers.Add(container);
+        }
+
+        /*private void SetDescription(string typeName)
         {
             container.Full += Container_Full;
             lDescription.Content = $"{container.Capacity} {typeName}";
             lContent.Content = container.Content.ToString();
-        }
-
-        private void Container_Full(double overflow)
-        {
-        }
+        }*/
     }
 }

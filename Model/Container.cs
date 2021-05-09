@@ -2,11 +2,11 @@
 
 namespace Buckets.Model
 {
-    public delegate void Full(double overflow);
+    public delegate void FullHandler(object sender, ContainerFullEventArgs e);
 
     public abstract class Container
     {
-        public event Full Full;
+        public event FullHandler Full;
 
         private double capacity;
         private double content;
@@ -28,6 +28,11 @@ namespace Buckets.Model
             this.content = content;
         }
 
+        public override string ToString()
+        {
+            return $"{capacity} {GetType().Name}";
+        }
+
         public void Fill(double amount)
         {
             if (amount <= 0)
@@ -39,11 +44,11 @@ namespace Buckets.Model
 
             if (content == capacity)
             {
-                Full(0);
+                OnContainerFull(new ContainerFullEventArgs());
             }
             else if (content > capacity)
             {
-                Full(content - capacity);
+                OnContainerFull(new ContainerFullEventArgs(content - capacity));
                 content = capacity;
             }
         }
@@ -82,6 +87,15 @@ namespace Buckets.Model
         public void Empty()
         {
             content = 0;
+        }
+
+        protected void OnContainerFull(ContainerFullEventArgs e)
+        {
+            FullHandler full = Full;
+            if (full != null)
+            {
+                full(this, e);
+            }
         }
 
         public double Capacity
