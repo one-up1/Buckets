@@ -1,4 +1,4 @@
-﻿namespace Buckets.Model
+﻿namespace Buckets.Common.Model
 {
     public sealed class RainBarrel : Container
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Buckets.Model
+namespace Buckets.Common.Model
 {
     public class ContainerFullEventArgs : EventArgs
     {

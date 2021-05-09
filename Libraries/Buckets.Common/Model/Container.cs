@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Buckets.Model
+namespace Buckets.Common.Model
 {
     public delegate void FullHandler(object sender, ContainerFullEventArgs e);
 

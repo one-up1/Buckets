@@ -1,4 +1,6 @@
-﻿using Buckets.Model;
+﻿using Buckets.Common.Model;
+using Buckets.ViewModel;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Buckets.WPF
@@ -53,7 +55,8 @@ namespace Buckets.WPF
 
         private void Container_Full(object sender, ContainerFullEventArgs e)
         {
-
+            Container container = (Container)sender;
+            Debug.WriteLine($"{container} full, overflow={e.Overflow}");
         }
 
         private void AddContainer(Container container)

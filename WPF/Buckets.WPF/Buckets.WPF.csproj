@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Model\Buckets.Model.csproj" />
+    <ProjectReference Include="..\..\Libraries\Buckets.Common\Buckets.Common.csproj" />
+    <ProjectReference Include="..\..\Libraries\Buckets.ViewModel\Buckets.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

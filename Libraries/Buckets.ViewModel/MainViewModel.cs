@@ -1,9 +1,9 @@
-﻿using Buckets.Model;
+﻿using Buckets.Common.Model;
 using System.Collections.ObjectModel;
 
-namespace Buckets.WPF
+namespace Buckets.ViewModel
 {
-    public class MainViewModel
+    public class MainViewModel : ViewModelBase
     {
         public ObservableCollection<Container> Containers { get; } = new();
     }
