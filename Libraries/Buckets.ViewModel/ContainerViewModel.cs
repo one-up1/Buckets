@@ -30,14 +30,14 @@ namespace Buckets.ViewModel
                 {
                     container.Content = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(DisplayValue));
                 }
             }
         }
-        
 
-        public override string ToString()
+        public string DisplayValue
         {
-            return $"{Capacity} {container.GetType().Name}\n{Content}\n";
+            get => $"{Capacity} {container.GetType().Name}\n{Content}\n";
         }
 
         public void Fill(double amount)
@@ -60,6 +60,11 @@ namespace Buckets.ViewModel
             }
         }
 
+        public void Empty()
+        {
+            Content = 0;
+        }
+
         public void Empty(double amount)
         {
             if (amount <= 0)
@@ -80,18 +85,9 @@ namespace Buckets.ViewModel
             Content -= amount;
         }
 
-        public void Empty()
-        {
-            Content = 0;
-        }
-
         protected void OnFull(ContainerFullEventArgs e)
         {
-            FullEventHandler full = Full;
-            if (full != null)
-            {
-                full(this, e);
-            }
+            Full?.Invoke(this, e);
         }
     }
 }

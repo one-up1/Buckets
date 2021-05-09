@@ -169,24 +169,40 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="5"
-            ItemsSource="{Binding Containers,Mode=OneWay}" />
+            ItemsSource="{Binding Containers,Mode=OneWay}"
+            SelectedItem="{Binding SelectedContainer,Mode=TwoWay}"
+            DisplayMemberPath="DisplayValue" />
 
-        <!--<StackPanel
+        <Grid
             Grid.Row="1"
-            Grid.Column="0"
-            Margin="5">
+            Grid.Column="1"
+            Visibility="{Binding IsContainerSelected,Mode=OneWay,
+            Converter={StaticResource BooleanToVisibilityConverter}}">
 
-            <Label
-                Name="lDescription"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="48"  />
+            </Grid.RowDefinitions>
+            
+            <TextBox
+                Name="tbAmount"
+                Grid.Row="0"
+                Margin="5" />
+
+            <Button
+                Grid.Row="1"
                 Margin="5"
-                FontWeight="Bold" />
+                Content="Fill container"
+                Click="bFillContainer_Click" />
 
-            <Label
-                Name="lContent"
-                Margin="5"
-                FontWeight="Bold" />
+            <Button
+                Grid.Row="2"
+                Margin="5" 
+                Content="Empty container"
+                Click="bEmptyContainer_Click" />
 
-        </StackPanel>-->
+        </Grid>
 
     </Grid>
 </Window>

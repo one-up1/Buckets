@@ -1,5 +1,6 @@
 ﻿using Buckets.Common.Model;
 using Buckets.ViewModel;
+using System;
 using System.Diagnostics;
 using System.Windows;
 
@@ -48,9 +49,38 @@ namespace Buckets.WPF
             viewModel.Containers.Add(new ContainerViewModel(oilBarrel));
         }
 
+        private void bFillContainer_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                viewModel.SelectedContainer.Fill(double.Parse(tbAmount.Text));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void bEmptyContainer_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbAmount.Text.Length == 0)
+                viewModel.SelectedContainer.Empty();
+            else
+            {
+                try
+                {
+                    viewModel.SelectedContainer.Empty(double.Parse(tbAmount.Text));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
         private void Container_Full(object sender, ContainerFullEventArgs e)
         {
-            Container container = (Container)sender;
+            ContainerViewModel container = (ContainerViewModel)sender;
             Debug.WriteLine($"{container} full, overflow={e.Overflow}");
         }
 
