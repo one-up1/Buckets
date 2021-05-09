@@ -26,7 +26,10 @@ namespace Buckets.WPF
                 bucket = Bucket.GetDefault(content);
             else
                 bucket = Bucket.Get(double.Parse(tbBucketCapacity.Text), content);
-            AddContainer(new BucketViewModel(bucket));
+
+            BucketViewModel bucketViewModel = new BucketViewModel(bucket);
+            AddContainer(bucketViewModel);
+            viewModel.OtherBuckets.Add(bucketViewModel);
         }
 
         private void bCreateRainBarrel_Click(object sender, RoutedEventArgs e)
@@ -39,6 +42,7 @@ namespace Buckets.WPF
                 rainBarrel = RainBarrel.GetLarge(content);
             else
                 rainBarrel = RainBarrel.Get(content);
+
             AddContainer(new ContainerViewModel(rainBarrel));
         }
 
@@ -46,7 +50,8 @@ namespace Buckets.WPF
         {
             double content = tbOilBarrelContent.Text.Length == 0 ? 0 : double.Parse(tbOilBarrelContent.Text);
             OilBarrel oilBarrel = OilBarrel.Get(content);
-            viewModel.Containers.Add(new ContainerViewModel(oilBarrel));
+
+            AddContainer(new ContainerViewModel(oilBarrel));
         }
 
         private void bFillContainer_Click(object sender, RoutedEventArgs e)
@@ -78,9 +83,29 @@ namespace Buckets.WPF
             }
         }
 
+        private void bFillBucket_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbFillBucket.SelectedItem != null)
+            {
+                BucketViewModel selectedBucket = viewModel.SelectedContainer as BucketViewModel;
+                BucketViewModel otherBucket = cbFillBucket.SelectedItem as BucketViewModel;
+                try
+                {
+                    if (tbAmount.Text.Length == 0)
+                        selectedBucket.Fill(otherBucket);
+                    else
+                        selectedBucket.Fill(otherBucket, double.Parse(tbAmount.Text));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
         private void Container_Full(object sender, ContainerFullEventArgs e)
         {
-            ContainerViewModel container = (ContainerViewModel)sender;
+            ContainerViewModel container = sender as ContainerViewModel;
             Debug.WriteLine($"{container} full, overflow={e.Overflow}");
         }
 

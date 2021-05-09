@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Buckets.ViewModel
 {
@@ -8,6 +9,8 @@ namespace Buckets.ViewModel
 
         public ObservableCollection<ContainerViewModel> Containers { get; } = new();
 
+        public ObservableCollection<BucketViewModel> OtherBuckets { get; } = new();
+
         public ContainerViewModel SelectedContainer
         {
             get => selectedContainer;
@@ -15,13 +18,21 @@ namespace Buckets.ViewModel
             {
                 if (selectedContainer != value)
                 {
+                    if (selectedContainer is BucketViewModel)
+                        OtherBuckets.Add(selectedContainer as BucketViewModel);
+                    if (value is BucketViewModel)
+                        OtherBuckets.Remove(value as BucketViewModel);
+
                     selectedContainer = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsContainerSelected));
+                    OnPropertyChanged(nameof(IsBucketSelected));
                 }
             }
         }
 
         public bool IsContainerSelected => SelectedContainer != null;
+
+        public bool IsBucketSelected => SelectedContainer is BucketViewModel;
     }
 }
