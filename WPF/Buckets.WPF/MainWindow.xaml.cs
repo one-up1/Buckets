@@ -20,37 +20,32 @@ namespace Buckets.WPF
         private void bCreateBucket_Click(object sender, RoutedEventArgs e)
         {
             double content = tbBucketContent.Text.Length == 0 ? 0 : double.Parse(tbBucketContent.Text);
+            Bucket bucket;
             if (tbBucketCapacity.Text.Length == 0)
-            {
-                viewModel.Containers.Add(Bucket.GetDefault(content));
-            }
+                bucket = Bucket.GetDefault(content);
             else
-            {
-                viewModel.Containers.Add(Bucket.Get(double.Parse(tbBucketCapacity.Text), content));
-            }
+                bucket = Bucket.Get(double.Parse(tbBucketCapacity.Text), content);
+            AddContainer(new BucketViewModel(bucket));
         }
 
         private void bCreateRainBarrel_Click(object sender, RoutedEventArgs e)
         {
             double content = tbRainBarrelContent.Text.Length == 0 ? 0 : double.Parse(tbRainBarrelContent.Text);
-            if (rbRainBarrelDefault.IsChecked == true)
-            {
-                viewModel.Containers.Add(RainBarrel.Get(content));
-            }
-            else if (rbRainBarrelSmall.IsChecked == true)
-            {
-                viewModel.Containers.Add(RainBarrel.GetSmall(content));
-            }
+            RainBarrel rainBarrel;
+            if (rbRainBarrelSmall.IsChecked == true)
+                rainBarrel = RainBarrel.GetSmall(content);
             else if (rbRainBarrelLarge.IsChecked == true)
-            {
-                viewModel.Containers.Add(RainBarrel.GetLarge(content));
-            }
+                rainBarrel = RainBarrel.GetLarge(content);
+            else
+                rainBarrel = RainBarrel.Get(content);
+            AddContainer(new ContainerViewModel(rainBarrel));
         }
 
         private void bCreateOilBarrel_Click(object sender, RoutedEventArgs e)
         {
             double content = tbOilBarrelContent.Text.Length == 0 ? 0 : double.Parse(tbOilBarrelContent.Text);
-            viewModel.Containers.Add(OilBarrel.Get(content));
+            OilBarrel oilBarrel = OilBarrel.Get(content);
+            viewModel.Containers.Add(new ContainerViewModel(oilBarrel));
         }
 
         private void Container_Full(object sender, ContainerFullEventArgs e)
@@ -59,17 +54,10 @@ namespace Buckets.WPF
             Debug.WriteLine($"{container} full, overflow={e.Overflow}");
         }
 
-        private void AddContainer(Container container)
+        private void AddContainer(ContainerViewModel container)
         {
             container.Full += Container_Full;
             viewModel.Containers.Add(container);
         }
-
-        /*private void SetDescription(string typeName)
-        {
-            container.Full += Container_Full;
-            lDescription.Content = $"{container.Capacity} {typeName}";
-            lContent.Content = container.Content.ToString();
-        }*/
     }
 }
