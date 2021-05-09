@@ -16,5 +16,10 @@ namespace Buckets.ViewModel
             Empty(amount);
             bucket.Fill(amount);
         }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} bucket";
+        }
     }
 }

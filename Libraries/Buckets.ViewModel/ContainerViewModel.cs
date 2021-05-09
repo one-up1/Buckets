@@ -5,7 +5,7 @@ namespace Buckets.ViewModel
 {
     public delegate void FullEventHandler(object sender, ContainerFullEventArgs e);
 
-    public class ContainerViewModel : ViewModelBase
+    public abstract class ContainerViewModel : ViewModelBase
     {
         public event FullEventHandler Full;
 
@@ -37,7 +37,12 @@ namespace Buckets.ViewModel
 
         public string DisplayValue
         {
-            get => $"{Capacity} {container.GetType().Name}\n{Content}\n";
+            get => $"{ToString()}\n{Content}\n";
+        }
+
+        public override string ToString()
+        {
+            return Capacity.ToString();
         }
 
         public void Fill(double amount)

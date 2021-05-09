@@ -216,8 +216,7 @@
                     Name="cbFillBucket"
                     Grid.Row="0"
                     Margin="5"
-                    ItemsSource="{Binding OtherBuckets,Mode=OneWay}"
-                    DisplayMemberPath="DisplayValue" />
+                    ItemsSource="{Binding OtherBuckets,Mode=OneWay}" />
 
                 <Button
                     Grid.Row="1"
