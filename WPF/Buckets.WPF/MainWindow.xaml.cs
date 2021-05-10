@@ -1,7 +1,7 @@
 ﻿using Buckets.Common.Model;
 using Buckets.ViewModel;
+using Buckets.ViewModel.Event;
 using System;
-using System.Diagnostics;
 using System.Windows;
 
 namespace Buckets.WPF
@@ -35,7 +35,7 @@ namespace Buckets.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -56,7 +56,7 @@ namespace Buckets.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -71,7 +71,7 @@ namespace Buckets.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Buckets.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Buckets.WPF
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -108,18 +108,18 @@ namespace Buckets.WPF
         {
             if (cbFillBucket.SelectedItem != null)
             {
-                BucketViewModel selectedBucket = viewModel.SelectedContainer as BucketViewModel;
-                BucketViewModel otherBucket = cbFillBucket.SelectedItem as BucketViewModel;
+                BucketViewModel sourceBucket = viewModel.SelectedContainer as BucketViewModel;
+                BucketViewModel targetBucket = cbFillBucket.SelectedItem as BucketViewModel;
                 try
                 {
                     if (tbAmount.Text.Length == 0)
-                        selectedBucket.Fill(otherBucket);
+                        sourceBucket.Fill(targetBucket);
                     else
-                        selectedBucket.Fill(otherBucket, double.Parse(tbAmount.Text));
+                        sourceBucket.Fill(targetBucket, double.Parse(tbAmount.Text));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -128,9 +128,15 @@ namespace Buckets.WPF
         {
             ContainerViewModel container = sender as ContainerViewModel;
             if (e.Overflow == 0)
-                MessageBox.Show($"{container} is full");
-            else
-                MessageBox.Show($"{container} overflowed with {e.Overflow}");
+                MessageBox.Show($"{container} is full", Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            else if (MessageBox.Show($"{container} will overflow with {e.Overflow}, continue?", Title,
+                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                if (e is BucketOverflowEventArgs)
+                    ((BucketOverflowEventArgs)e).SourceBucket.Fill((BucketViewModel)sender, e.Amount, true);
+                else
+                    container.Fill(e.Amount, true);
+            }
         }
 
         private void AddContainer(ContainerViewModel container)

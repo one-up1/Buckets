@@ -1,4 +1,5 @@
 ﻿using Buckets.Common.Model;
+using Buckets.ViewModel.Event;
 using System;
 
 namespace Buckets.ViewModel
@@ -47,21 +48,33 @@ namespace Buckets.ViewModel
 
         public void Fill(double amount)
         {
+            Fill(amount, false);
+        }
+
+        public void Fill(double amount, bool force)
+        {
             if (amount <= 0)
             {
                 throw new ArgumentOutOfRangeException("amount",
                     "amount must be greater than 0");
             }
-            Content += amount;
-
-            if (Content == Capacity)
+            
+            double content = Content + amount;
+            if (content > Capacity)
+            {
+                if (force)
+                {
+                    Content = Capacity;
+                    OnFull(new ContainerFullEventArgs());
+                }
+                else
+                {
+                    OnFull(new ContainerFullEventArgs(content - Capacity, amount));
+                }
+            }
+            else if ((Content = content) == Capacity)
             {
                 OnFull(new ContainerFullEventArgs());
-            }
-            else if (Content > Capacity)
-            {
-                OnFull(new ContainerFullEventArgs(Content - Capacity));
-                Content = Capacity;
             }
         }
 

@@ -8,7 +8,7 @@ namespace Buckets.ViewModel
 
         public override string ToString()
         {
-            return $"{base.ToString()} bucket";
+            return $"{base.ToString()} rain barrel";
         }
     }
 }
