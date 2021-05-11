@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buckets.Common", "Libraries
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buckets.ViewModel", "Libraries\Buckets.ViewModel\Buckets.ViewModel.csproj", "{1A9D9762-A42C-4EB8-8BCE-89C6CCDC9566}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buckets.WPF", "WPF\Buckets.WPF\Buckets.WPF.csproj", "{827007F5-2136-4AC6-BFB2-BA2AF32829E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buckets.WPF", "WPF\Buckets.WPF\Buckets.WPF.csproj", "{827007F5-2136-4AC6-BFB2-BA2AF32829E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BucketTests", "BucketTests\BucketTests.csproj", "{FE424572-469E-4F3B-9F98-76FF1B2E58A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{827007F5-2136-4AC6-BFB2-BA2AF32829E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{827007F5-2136-4AC6-BFB2-BA2AF32829E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{827007F5-2136-4AC6-BFB2-BA2AF32829E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE424572-469E-4F3B-9F98-76FF1B2E58A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE424572-469E-4F3B-9F98-76FF1B2E58A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE424572-469E-4F3B-9F98-76FF1B2E58A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE424572-469E-4F3B-9F98-76FF1B2E58A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
