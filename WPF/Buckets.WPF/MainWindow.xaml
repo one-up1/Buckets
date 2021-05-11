@@ -183,6 +183,7 @@
                 <RowDefinition Height="48" />
                 <RowDefinition Height="48"  />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBox
@@ -204,7 +205,7 @@
 
             <Grid
                 Grid.Row="3"
-                Margin="0 25 0 0"
+                Margin="0 15 0 0"
                 Visibility="{Binding IsBucketSelected,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <Grid.RowDefinitions>
@@ -225,7 +226,13 @@
                     Click="bFillBucket_Click" />
 
             </Grid>
-            
+
+            <CheckBox
+                Name="cbForceFill"
+                Grid.Row="4"
+                Margin="5 20 5 5"
+                Content="Ignore overflow warnings" />
+
         </Grid>
 
     </Grid>

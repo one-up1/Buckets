@@ -7,16 +7,6 @@ namespace Buckets.ViewModel
     {
         public BucketViewModel(Bucket bucket) : base(bucket) { }
 
-        public void Fill(BucketViewModel bucket)
-        {
-            Fill(bucket, Content, false);
-        }
-        
-        public void Fill(BucketViewModel bucket, double amount)
-        {
-            Fill(bucket, amount, false);
-        }
-
         public void Fill(BucketViewModel bucket, double amount, bool force)
         {
             if (force)

@@ -79,7 +79,8 @@ namespace Buckets.WPF
         {
             try
             {
-                viewModel.SelectedContainer.Fill(double.Parse(tbAmount.Text));
+                viewModel.SelectedContainer.Fill(double.Parse(tbAmount.Text),
+                    cbForceFill.IsChecked == true);
             }
             catch (Exception ex)
             {
@@ -112,10 +113,8 @@ namespace Buckets.WPF
                 BucketViewModel targetBucket = cbFillBucket.SelectedItem as BucketViewModel;
                 try
                 {
-                    if (tbAmount.Text.Length == 0)
-                        sourceBucket.Fill(targetBucket);
-                    else
-                        sourceBucket.Fill(targetBucket, double.Parse(tbAmount.Text));
+                    double amount = tbAmount.Text.Length == 0 ? sourceBucket.Content : double.Parse(tbAmount.Text);
+                    sourceBucket.Fill(targetBucket, amount, cbForceFill.IsChecked == true);
                 }
                 catch (Exception ex)
                 {

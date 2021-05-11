@@ -46,11 +46,6 @@ namespace Buckets.ViewModel
             return Capacity.ToString();
         }
 
-        public void Fill(double amount)
-        {
-            Fill(amount, false);
-        }
-
         public void Fill(double amount, bool force)
         {
             if (amount <= 0)
