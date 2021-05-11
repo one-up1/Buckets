@@ -127,15 +127,16 @@ namespace Buckets.WPF
         {
             ContainerViewModel container = sender as ContainerViewModel;
             if (e.Overflow == 0)
-                MessageBox.Show($"{container} is full", Title, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"{container} is full", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
             else if (MessageBox.Show($"{container} will overflow with {e.Overflow}, continue?", Title,
                 MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                if (e is BucketOverflowEventArgs)
-                    ((BucketOverflowEventArgs)e).SourceBucket.Fill((BucketViewModel)sender, e.Amount, true);
+                if (e is BucketOverflowEventArgs be)
+                    be.SourceBucket.Fill((BucketViewModel)sender, be.Amount, true);
                 else
                     container.Fill(e.Amount, true);
             }
+            
         }
 
         private void AddContainer(ContainerViewModel container)

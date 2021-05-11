@@ -231,7 +231,7 @@
                 Name="cbForceFill"
                 Grid.Row="4"
                 Margin="5 20 5 5"
-                Content="Ignore overflow warnings" />
+                Content="Ignore warnings" />
 
         </Grid>
 

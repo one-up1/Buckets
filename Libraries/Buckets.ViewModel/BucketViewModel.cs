@@ -22,17 +22,6 @@ namespace Buckets.ViewModel
                 else
                     Fill(bucket, amount, true);
             }
-
-            /*double content = bucket.Content + amount;
-            if (content <= bucket.Capacity || force)
-            {
-                Empty(amount);
-                bucket.Fill(amount, force);
-            }
-            else
-            {
-                bucket.OnFull(new BucketOverflowEventArgs(content - bucket.Capacity, amount, this));
-            }*/
         }
 
         public override string ToString()

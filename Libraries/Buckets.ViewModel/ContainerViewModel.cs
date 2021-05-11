@@ -53,24 +53,14 @@ namespace Buckets.ViewModel
                 throw new ArgumentOutOfRangeException("amount",
                     "amount must be greater than 0");
             }
-            
+
             double content = Content + amount;
-            if (content > Capacity)
-            {
-                if (force)
-                {
-                    Content = Capacity;
-                    OnFull(new ContainerFullEventArgs());
-                }
-                else
-                {
-                    OnFull(new ContainerFullEventArgs(content - Capacity, amount));
-                }
-            }
+            if (force)
+                Content = content > Capacity ? Capacity : content;
+            else if (content > Capacity)
+                OnFull(new ContainerFullEventArgs(content - Capacity, amount));
             else if ((Content = content) == Capacity)
-            {
                 OnFull(new ContainerFullEventArgs());
-            }
         }
 
         public void Empty()
