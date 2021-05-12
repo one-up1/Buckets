@@ -19,8 +19,7 @@ namespace Buckets.ViewModel
                 double content = bucket.Content + amount;
                 if (content > bucket.Capacity)
                     bucket.OnFull(new BucketOverflowEventArgs(content - bucket.Capacity, amount, this));
-                else
-                    Fill(bucket, amount, true);
+                else Fill(bucket, amount, true);
             }
         }
 

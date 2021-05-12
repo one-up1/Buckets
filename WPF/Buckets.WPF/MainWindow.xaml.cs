@@ -26,8 +26,7 @@ namespace Buckets.WPF
                 Bucket bucket;
                 if (tbBucketCapacity.Text.Length == 0)
                     bucket = Bucket.GetDefault(content);
-                else
-                    bucket = Bucket.Get(double.Parse(tbBucketCapacity.Text), content);
+                else bucket = Bucket.Get(double.Parse(tbBucketCapacity.Text), content);
 
                 BucketViewModel bucketViewModel = new BucketViewModel(bucket);
                 AddContainer(bucketViewModel);
@@ -49,8 +48,7 @@ namespace Buckets.WPF
                     rainBarrel = RainBarrel.GetSmall(content);
                 else if (rbRainBarrelLarge.IsChecked == true)
                     rainBarrel = RainBarrel.GetLarge(content);
-                else
-                    rainBarrel = RainBarrel.Get(content);
+                else rainBarrel = RainBarrel.Get(content);
 
                 AddContainer(new RainBarrelViewModel(rainBarrel));
             }
@@ -133,8 +131,7 @@ namespace Buckets.WPF
             {
                 if (e is BucketOverflowEventArgs be)
                     be.SourceBucket.Fill((BucketViewModel)sender, be.Amount, true);
-                else
-                    container.Fill(e.Amount, true);
+                else container.Fill(e.Amount, true);
             }
             
         }

@@ -68,8 +68,15 @@ namespace BucketTests
         public void FillContainers()
         {
             ContainerViewModel container = new BucketViewModel(Bucket.GetDefault(4));
+            BucketViewModel sourceBucket, targetBucket;
 
-            // Test whether content is adjused correctly when filling a container.
+            bool eventRaised;
+            container.Full += delegate (object sender, ContainerFullEventArgs e)
+            {
+                eventRaised = true;
+            };
+
+            // Test whether content is adjusted correctly when filling a container.
             container.Fill(2, false);
             Assert.Equal(6, container.Content);
 
@@ -83,17 +90,38 @@ namespace BucketTests
             Assert.Throws<ArgumentOutOfRangeException>(() => container.Fill(0, false));
             Assert.Throws<ArgumentOutOfRangeException>(() => container.Fill(-2, false));
 
-            // Test whether an event is raised when overflowing a container.
-            bool eventRaised = false;
-            container.Full += delegate(object sender, ContainerFullEventArgs e)
+            // Test whether or not an event is raised when overflowing a container.
+            eventRaised = false;
+            container.Fill(1, true);
+            Assert.False(eventRaised);
+            container.Fill(1, false);
+            Assert.True(eventRaised);
+            eventRaised = false;
+            container.Empty();
+            container.Fill(1, false);
+            Assert.False(eventRaised);
+
+            // Test filling buckets with other buckets.
+            sourceBucket = new BucketViewModel(Bucket.GetDefault(2));
+            targetBucket = new BucketViewModel(Bucket.GetDefault(4));
+            sourceBucket.Fill(targetBucket, 2, false);
+            Assert.Equal(0, sourceBucket.Content);
+            Assert.Equal(6, targetBucket.Content);
+
+            // Test whether or not an event is raised when overflowing a bucket with another bucket.
+            sourceBucket = new BucketViewModel(Bucket.GetDefault(6));
+            targetBucket = new BucketViewModel(Bucket.GetDefault(8));
+            eventRaised = false;
+            targetBucket.Full += delegate (object sender, ContainerFullEventArgs e)
             {
                 eventRaised = true;
             };
-            container.Fill(1, false);
+            sourceBucket.Fill(targetBucket, sourceBucket.Content, false);
             Assert.True(eventRaised);
-
-            // TODO: Test whether no event is raised when not forcing overflow.
-            // TODO: Test filling buckets with other buckets.
+            
+            /*Assert.False(eventRaised);
+            container.Fill(1, false);
+            Assert.True(eventRaised);*/
         }
 
         [Fact]
@@ -116,6 +144,8 @@ namespace BucketTests
             Assert.Throws<InvalidOperationException>(() => container.Empty(100));
             container.Fill(100, false);
             Assert.Throws<ArgumentOutOfRangeException>(() => container.Empty(200));
+            container.Empty(); // This method should not throw an exception when container is empty.
+            container.Empty();
         }
 
         /*[Theory]
