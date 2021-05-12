@@ -8,6 +8,11 @@ namespace BucketTests
 {
     public class BucketTest
     {
+        private bool eventRaised;
+        private double expectedAmount;
+        private double expectedOverflow;
+        private BucketViewModel expectedSourceBucket;
+
         [Fact]
         public void CreateContainers()
         {
@@ -67,61 +72,85 @@ namespace BucketTests
         [Fact]
         public void FillContainers()
         {
-            ContainerViewModel container = new BucketViewModel(Bucket.GetDefault(4));
-            BucketViewModel sourceBucket, targetBucket;
-
-            bool eventRaised;
-            container.Full += delegate (object sender, ContainerFullEventArgs e)
-            {
-                eventRaised = true;
-            };
-
-            // Test whether content is adjusted correctly when filling a container.
-            container.Fill(2, false);
-            Assert.Equal(6, container.Content);
-
-            // Test whether content is adjusted correctly when overflowing a container.
-            container.Fill(100, false); // Should not fill when not forcing.
-            Assert.Equal(6, container.Content);
-            container.Fill(100, true);
-            Assert.Equal(container.Capacity, container.Content);
+            BucketViewModel bucket1 = new BucketViewModel(Bucket.GetDefault(6));
+            BucketViewModel bucket2 = new BucketViewModel(Bucket.GetDefault(0));
 
             // Test whether an exception is thrown when passing invalid ammounts.
-            Assert.Throws<ArgumentOutOfRangeException>(() => container.Fill(0, false));
-            Assert.Throws<ArgumentOutOfRangeException>(() => container.Fill(-2, false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => bucket1.Fill(0, false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => bucket1.Fill(-2, false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => bucket1.Fill(bucket2, 0, false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => bucket1.Fill(bucket2, -2, false));
 
-            // Test whether or not an event is raised when overflowing a container.
-            eventRaised = false;
-            container.Fill(1, true);
-            Assert.False(eventRaised);
-            container.Fill(1, false);
-            Assert.True(eventRaised);
-            eventRaised = false;
-            container.Empty();
-            container.Fill(1, false);
-            Assert.False(eventRaised);
+            // Test whether content is adjusted correctly when filling a container.
+            bucket1.Fill(2, false);
+            Assert.Equal(8, bucket1.Content);
+
+            // Test whether content is adjusted correctly when overflowing a container.
+            bucket1.Fill(100, false); // Should not fill when not forcing.
+            Assert.Equal(8, bucket1.Content);
+            bucket1.Fill(100, true);
+            Assert.Equal(bucket1.Capacity, bucket1.Content);
 
             // Test filling buckets with other buckets.
-            sourceBucket = new BucketViewModel(Bucket.GetDefault(2));
-            targetBucket = new BucketViewModel(Bucket.GetDefault(4));
-            sourceBucket.Fill(targetBucket, 2, false);
-            Assert.Equal(0, sourceBucket.Content);
-            Assert.Equal(6, targetBucket.Content);
+            bucket1.Fill(bucket2, 4, false);
+            Assert.Equal(8, bucket1.Content);
+            Assert.Equal(4, bucket2.Content);
+            bucket1.Fill(bucket2, bucket1.Content, false);
+            Assert.Equal(0, bucket1.Content);
+            Assert.Equal(12, bucket2.Content);
+            bucket2.Empty();
 
-            // Test whether or not an event is raised when overflowing a bucket with another bucket.
-            sourceBucket = new BucketViewModel(Bucket.GetDefault(6));
-            targetBucket = new BucketViewModel(Bucket.GetDefault(8));
-            eventRaised = false;
-            targetBucket.Full += delegate (object sender, ContainerFullEventArgs e)
-            {
-                eventRaised = true;
-            };
-            sourceBucket.Fill(targetBucket, sourceBucket.Content, false);
+            // Test events.
+            bucket1.Full += Container_Full;
+            bucket2.Full += Container_Full;
+
+            // No event should be raised when not filling container to capacity or when forcing.
+            TestEvent(0, 0);
+            bucket1.Fill(8, false);
+            bucket1.Fill(4, true);
+            bucket1.Fill(12, true);
+            bucket1.Fill(bucket2, 6, false);
+            bucket1.Fill(6, true);
+            bucket1.Fill(bucket2, 12, true);
+            Assert.False(eventRaised);
+
+            // Test whether an event is raised when filling a container to capacity.
+            TestEvent(4, 0);
+            bucket1.Fill(8, false);
+            bucket1.Fill(4, false);
             Assert.True(eventRaised);
-            
-            /*Assert.False(eventRaised);
-            container.Fill(1, false);
-            Assert.True(eventRaised);*/
+
+            // Test whether an event is raised when overflowing a container.
+            bucket1.Empty(4);
+            TestEvent(6, 2);
+            bucket1.Fill(6, false);
+            Assert.True(eventRaised);
+
+            // Test whether an event is raised when overflowing a bucket with another bucket.
+            expectedSourceBucket = bucket1;
+            TestEvent(12, 12);
+            bucket1.Fill(bucket2, 12, false);
+            Assert.True(eventRaised);
+        }
+
+        private void TestEvent(double expectedAmount, double expectedOverflow)
+        {
+            this.eventRaised = false;
+            this.expectedAmount = expectedAmount;
+            this.expectedOverflow = expectedOverflow;
+        }
+
+        private void Container_Full(object sender, ContainerFullEventArgs e)
+        {
+            eventRaised = true;
+            Assert.Equal(expectedAmount, e.Amount);
+            Assert.Equal(expectedOverflow, e.Overflow);
+
+            if (expectedSourceBucket != null)
+            {
+                Assert.IsType<BucketOverflowEventArgs>(e);
+                Assert.Same(expectedSourceBucket, ((BucketOverflowEventArgs)e).SourceBucket);
+            }
         }
 
         [Fact]
@@ -129,15 +158,15 @@ namespace BucketTests
         {
             ContainerViewModel container = new OilBarrelViewModel(OilBarrel.Get(100));
 
+            // Test whether an exception is thrown when passing invalid ammounts.
+            Assert.Throws<ArgumentOutOfRangeException>(() => container.Empty(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => container.Empty(-2));
+
             // Test whether content is adjused correctly when emptying a container.
             container.Empty(25);
             Assert.Equal(75, container.Content);
             container.Empty();
             Assert.Equal(0, container.Content);
-
-            // Test whether an exception is thrown when passing invalid ammounts.
-            Assert.Throws<ArgumentOutOfRangeException>(() => container.Empty(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => container.Empty(-2));
             
             // Test whether an exception is thrown when trying to empty a container
             // that is already empty or when it contains less than the amount requested.

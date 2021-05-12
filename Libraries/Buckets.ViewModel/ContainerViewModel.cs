@@ -58,9 +58,9 @@ namespace Buckets.ViewModel
             if (force)
                 Content = content > Capacity ? Capacity : content;
             else if (content > Capacity)
-                OnFull(new ContainerFullEventArgs(content - Capacity, amount));
+                OnFull(new ContainerFullEventArgs(amount, content - Capacity));
             else if ((Content = content) == Capacity)
-                OnFull(new ContainerFullEventArgs());
+                OnFull(new ContainerFullEventArgs(amount));
         }
 
         public void Empty()

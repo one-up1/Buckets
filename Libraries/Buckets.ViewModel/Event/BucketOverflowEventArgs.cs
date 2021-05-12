@@ -2,7 +2,7 @@
 {
     public class BucketOverflowEventArgs : ContainerFullEventArgs
     {
-        public BucketOverflowEventArgs(double overflow, double amount, BucketViewModel sourceBucket) : base(overflow, amount)
+        public BucketOverflowEventArgs(double amount, double overflow, BucketViewModel sourceBucket) : base(amount, overflow)
         {
             SourceBucket = sourceBucket;
         }

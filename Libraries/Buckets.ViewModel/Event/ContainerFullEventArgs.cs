@@ -4,16 +4,18 @@ namespace Buckets.ViewModel.Event
 {
     public class ContainerFullEventArgs : EventArgs
     {
-        public ContainerFullEventArgs() { }
-
-        public ContainerFullEventArgs(double overflow, double amount)
+        public ContainerFullEventArgs(double amount)
         {
-            Overflow = overflow;
             Amount = amount;
         }
 
-        public double Overflow { get; }
+        public ContainerFullEventArgs(double amount, double overflow) : this(amount)
+        {
+            Overflow = overflow;
+        }
 
         public double Amount { get; }
+
+        public double Overflow { get; }
     }
 }
