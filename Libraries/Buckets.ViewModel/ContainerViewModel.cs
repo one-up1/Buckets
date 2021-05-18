@@ -1,20 +1,20 @@
 ﻿using Buckets.Common.Model;
-using Buckets.ViewModel.Event;
-using System;
+using System.Runtime.CompilerServices;
 
 namespace Buckets.ViewModel
 {
-    public delegate void FullEventHandler(object sender, ContainerFullEventArgs e);
-
     public abstract class ContainerViewModel : ViewModelBase
     {
-        public event FullEventHandler Full;
-
         private readonly Container container;
 
-        public ContainerViewModel(Container container)
+        protected ContainerViewModel(Container container)
         {
             this.container = container;
+        }
+
+        public Container Container
+        {
+            get => container;
         }
 
         public double Capacity
@@ -25,15 +25,6 @@ namespace Buckets.ViewModel
         public double Content
         {
             get => container.Content;
-            set
-            {
-                if (container.Content != value)
-                {
-                    container.Content = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(DisplayValue));
-                }
-            }
         }
 
         public string DisplayValue
@@ -48,49 +39,25 @@ namespace Buckets.ViewModel
 
         public void Fill(double amount, bool force)
         {
-            if (amount <= 0)
-            {
-                throw new ArgumentOutOfRangeException("amount",
-                    "amount must be greater than 0");
-            }
-
-            double content = Content + amount;
-            if (force)
-                Content = content > Capacity ? Capacity : content;
-            else if (content > Capacity)
-                OnFull(new ContainerFullEventArgs(amount, content - Capacity));
-            else if ((Content = content) == Capacity)
-                OnFull(new ContainerFullEventArgs(amount));
+            container.Fill(amount, force);
+            OnPropertyChanged();
         }
 
         public void Empty()
         {
-            Content = 0;
+            container.Empty();
+            OnPropertyChanged();
         }
 
         public void Empty(double amount)
         {
-            if (amount <= 0)
-            {
-                throw new ArgumentOutOfRangeException("amount",
-                    "amount must be greater than 0");
-            }
-            if (Content == 0)
-            {
-                throw new InvalidOperationException("Container is empty");
-            }
-            if (Content < amount)
-            {
-                throw new ArgumentOutOfRangeException("amount",
-                    $"There is only {Content} left...");
-            }
-
-            Content -= amount;
+            container.Empty(amount);
+            OnPropertyChanged();
         }
 
-        protected void OnFull(ContainerFullEventArgs e)
+        protected void OnPropertyChanged()
         {
-            Full?.Invoke(this, e);
+            OnPropertyChanged(nameof(DisplayValue));
         }
     }
 }

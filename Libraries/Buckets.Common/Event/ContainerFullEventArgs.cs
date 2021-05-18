@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Buckets.ViewModel.Event
+namespace Buckets.Common.Event
 {
     public class ContainerFullEventArgs : EventArgs
     {

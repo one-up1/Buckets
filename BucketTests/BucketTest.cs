@@ -1,6 +1,5 @@
+using Buckets.Common.Event;
 using Buckets.Common.Model;
-using Buckets.ViewModel;
-using Buckets.ViewModel.Event;
 using System;
 using Xunit;
 
@@ -11,7 +10,7 @@ namespace BucketTests
         private bool eventRaised;
         private double expectedAmount;
         private double expectedOverflow;
-        private BucketViewModel expectedSourceBucket;
+        private Bucket expectedSourceBucket;
 
         [Fact]
         public void CreateContainers()
@@ -72,8 +71,8 @@ namespace BucketTests
         [Fact]
         public void FillContainers()
         {
-            BucketViewModel bucket1 = new BucketViewModel(Bucket.GetDefault(6));
-            BucketViewModel bucket2 = new BucketViewModel(Bucket.GetDefault(0));
+            Bucket bucket1 = Bucket.GetDefault(6);
+            Bucket bucket2 = Bucket.GetDefault(0);
 
             // Test whether an exception is thrown when passing invalid ammounts.
             Assert.Throws<ArgumentOutOfRangeException>(() => bucket1.Fill(0, false));
@@ -156,7 +155,7 @@ namespace BucketTests
         [Fact]
         public void EmptyContainers()
         {
-            ContainerViewModel container = new OilBarrelViewModel(OilBarrel.Get(100));
+            Container container = OilBarrel.Get(100);
 
             // Test whether an exception is thrown when passing invalid ammounts.
             Assert.Throws<ArgumentOutOfRangeException>(() => container.Empty(0));

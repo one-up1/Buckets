@@ -1,6 +1,6 @@
-﻿using Buckets.Common.Model;
+﻿using Buckets.Common.Event;
+using Buckets.Common.Model;
 using Buckets.ViewModel;
-using Buckets.ViewModel.Event;
 using System;
 using System.Windows;
 
@@ -123,14 +123,14 @@ namespace Buckets.WPF
 
         private void Container_Full(object sender, ContainerFullEventArgs e)
         {
-            ContainerViewModel container = sender as ContainerViewModel;
+            Container container = sender as Container;
             if (e.Overflow == 0)
                 MessageBox.Show($"{container} is full", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
             else if (MessageBox.Show($"{container} will overflow with {e.Overflow}, continue?", Title,
                 MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 if (e is BucketOverflowEventArgs be)
-                    be.SourceBucket.Fill((BucketViewModel)sender, be.Amount, true);
+                    be.SourceBucket.Fill((Bucket)sender, be.Amount, true);
                 else container.Fill(e.Amount, true);
             }
             
@@ -138,7 +138,7 @@ namespace Buckets.WPF
 
         private void AddContainer(ContainerViewModel container)
         {
-            container.Full += Container_Full;
+            container.Container.Full += Container_Full;
             viewModel.Containers.Add(container);
         }
     }

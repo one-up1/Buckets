@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Buckets.Common.Event;
+using System;
 
 namespace Buckets.Common.Model
 {
@@ -8,6 +9,28 @@ namespace Buckets.Common.Model
         private const double CAPACITY_MIN = 10;
 
         private Bucket(double capacity, double content) : base(capacity, content) { }
+
+        public void Fill(Bucket bucket, double amount, bool force)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentOutOfRangeException("amount",
+                    "amount must be greater than 0");
+            }
+
+            if (force)
+            {
+                Empty(amount);
+                bucket.Fill(amount, true);
+            }
+            else
+            {
+                double content = bucket.Content + amount;
+                if (content > bucket.Capacity)
+                    bucket.OnFull(new BucketOverflowEventArgs(amount, content - bucket.Capacity, this));
+                else Fill(bucket, amount, true);
+            }
+        }
 
         public static Bucket GetDefault()
         {
