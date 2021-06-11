@@ -26,9 +26,9 @@ namespace Buckets.Common.Model
             Content = content;
         }
 
-        public double Capacity { get; set; }
+        public double Capacity { get; private set; }
 
-        public double Content { get; set; }
+        public double Content { get; private set; }
 
         public void Fill(double amount, bool force)
         {
@@ -52,7 +52,7 @@ namespace Buckets.Common.Model
             Content = 0;
         }
 
-        public void Empty(double amount)
+        public void Empty(this double amount)
         {
             if (amount <= 0)
             {
