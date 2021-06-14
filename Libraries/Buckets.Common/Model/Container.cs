@@ -52,7 +52,7 @@ namespace Buckets.Common.Model
             Content = 0;
         }
 
-        public void Empty(this double amount)
+        public void Empty(double amount)
         {
             if (amount <= 0)
             {
